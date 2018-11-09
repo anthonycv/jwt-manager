@@ -8,7 +8,7 @@ use Predis\Client;
 /**
  * Class JwtManager
  *
- * @package stormwind\jwt
+ * @package Stormwind\Jwt
  */
 class JwtManager
 {
@@ -134,10 +134,7 @@ class JwtManager
 
         }catch (Exception $e) {
 
-            return [
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ];
+            return 'Error: ' . $e->getMessage();
 
         }
     }
@@ -146,24 +143,29 @@ class JwtManager
      * Decode a token into a object for access the claims use the name claim like attribute, exmaple: $token->jti.
      *
      * @param $raw                   token encoded.
+     * @param $hash                  hash for decrypt.
      * @return JwtCommon|string
      *
      * @throws Exception             structure wrong of token.
      */
-    public function decode($raw)
+    public function decode($raw, $hash = null)
     {
         try{
 
-            $this->jwt = new JsonWebToken($raw, $this->key, $this->hash);
+            $hash = ($hash)?$hash:$this->hash;
+
+            $this->jwt = new JsonWebToken($raw, $this->key, $hash);
+
+//            echo "<pre>";
+//            print_r($this->jwt);
+//            echo "</pre>";
+//            die(".as..");
 
             return $this->jwt;
 
         }catch (Exception $e) {
 
-            return [
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ];
+            return 'Error: ' . $e->getMessage();
 
         }
 
@@ -207,22 +209,21 @@ class JwtManager
 
         try{
 
-            $this->decode($raw);
+            $reponse = $this->decode($raw);
 
-            if (empty($this->_redis->get($this->jwt->{$this->jwtId}))){
-                throw new Exception('jwt no whitelisted');
+            if(is_string($reponse)){
+                throw new Exception($reponse);
             }
 
-            return [
-                'status' => 'valid',
-            ];
+            if (empty($this->_redis->get($this->jwt->{$this->jwtId}) OR is_string($reponse))){;
+                throw new Exception('Error: jwt no whitelisted');
+            }
+
+            return true;
 
         }catch (Exception $e) {
 
-            return [
-                'status' => 'invalid',
-                'message' => $e->getMessage(),
-            ];
+            return $e->getMessage();
 
         }
     }
@@ -239,10 +240,15 @@ class JwtManager
     public function removeWhiteList($raw)
     {
 
-        $this->decode($raw);
+        $response = $this->decode($raw);
         $this->_redis->del($this->jwt->{$this->jwtId});
 
-        return true;
+        if(is_object($response)){
+            return true;
+        }else{
+            return $response;
+        }
+
 
     }
 

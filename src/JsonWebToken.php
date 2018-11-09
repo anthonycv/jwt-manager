@@ -7,7 +7,7 @@ use Carbon\Carbon;
 /**
  * Class JsonWebToken.
  *
- * @package stormwind\jwt
+ * @package Stormwind\Jwt
  */
 class JsonWebToken
 {
@@ -36,7 +36,7 @@ class JsonWebToken
      * @param string $key       Secret key for encrypt the tokens.
      * @param string $hash      Algorithm for encrypt the tokens.
      */
-    public function __construct($rawOrClaims, $key = 'Secret Key', $hash = 'HS384')
+    public function __construct($rawOrClaims, $key = 'Secret Key', $hash = 'HS256')
     {
         $this->hash = $hash;
         $this->key = $key;
