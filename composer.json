@@ -1,0 +1,46 @@
+{
+  "name": "anthonycv/jwt-manager",
+  "description": "manager jwt",
+  "license": "MIT",
+  "keywords": [
+    "jwt",
+    "guard",
+    "laravel",
+    "json",
+    "web",
+    "token",
+    "stormwind",
+    "whitelist",
+    "auth"
+  ],
+  "authors": [
+    {
+      "name": "Anthony Castro",
+      "email": "anthony.castrov@gmail.com"
+    }
+  ],
+  "require": {
+    "firebase/php-jwt": "~3.0|~4.0",
+    "nesbot/carbon": "^1.33",
+    "predis/predis": "^1.1"
+
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.0.*"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Anthonycv\\JwtManager\\Auth\\AuthServiceProvider"
+      ]
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Anthonycv\\JwtManager\\": "src"
+    },
+    "files":[
+      "src/Support/helpers.php"
+    ]
+  }
+}
