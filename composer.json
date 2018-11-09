@@ -30,8 +30,7 @@
   },
   "extra": {
     "laravel": {
-      "providers": [
-        "Anthonycv\\JwtManager\\Auth\\AuthServiceProvider"
+      "dont-discover": [
       ]
     }
   },
